@@ -1,0 +1,3 @@
+rootProject.name = "ByteXPlugin"
+include ':app'
+include ':bitmap-check-plugin'

@@ -1,0 +1,68 @@
+Properties properties = new Properties()
+try {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+} catch (e) {
+}
+def PASSWORD = properties.getProperty('PASSWORD', "")
+def USERNAME = properties.getProperty('USERNAME', "")
+def UPLOAD_MAVEN_URL = properties.getProperty('UPLOAD_MAVEN_URL', "")
+def UPLOAD_MAVEN_URL_SNAPSHOT = properties.getProperty('UPLOAD_MAVEN_URL_SNAPSHOT', "")
+def USERNAME_SNAPSHOT = properties.getProperty('USERNAME_SNAPSHOT', "")
+def PASSWORD_SNAPSHOT = properties.getProperty('PASSWORD_SNAPSHOT', "")
+def BINTRAY_KEY = properties.getProperty('BINTRAY_KEY', "")
+
+def uploadToMaven = false
+def uploadToJCenter = false
+def useSnapshotMaven = false
+def uploadToJitPack = false
+try {
+    uploadToMaven = properties.getProperty('upload2Maven')
+    uploadToJCenter = properties.getProperty('upload2JCenter')
+    uploadToJitPack = properties.getProperty('upload2JitPack')
+    useSnapshotMaven = properties.getProperty('useSnapshotMaven')
+} catch (e) {
+}
+
+ext {
+    gradle_version = '3.5.3'
+    bytex_version = "0.3.0"
+
+    upload2Maven = uploadToMaven
+    upload2JCenter = uploadToJCenter
+    upload2JitPack = uploadToJitPack
+    useSnapshot = useSnapshotMaven
+    upload_user_name = USERNAME
+    upload_password = PASSWORD
+    upload_maven_url = UPLOAD_MAVEN_URL
+    upload_user_name_snapshot = USERNAME_SNAPSHOT
+    upload_password_snapshot = PASSWORD_SNAPSHOT
+    upload_maven_url_snapshot = UPLOAD_MAVEN_URL_SNAPSHOT
+    upload_group = 'com.rookie.plugin'
+//    upload_version = "1.0.0${(useSnapshotMaven.toBoolean() ? "-${doSh("git config user.name")}-SNAPSHOT" : "")}"
+    upload_version = bytex_version //与 byteX 版本保持一致
+    upload_dir = project.rootProject.file('gradle_plugins').path
+    bintray_key = BINTRAY_KEY
+}
+println("upload2Maven:$upload2Maven")
+println("upload2JCenter:$upload2JCenter")
+println("upload2JitPack:$upload2JitPack")
+println("useSnapshot:$useSnapshot")
+println("upload_user_name:$upload_user_name")
+println("upload_password:$upload_password")
+println("upload_maven_url:$upload_maven_url")
+println("upload_user_name_snapshot:$upload_user_name_snapshot")
+println("upload_password_snapshot:$upload_password_snapshot")
+println("upload_maven_url_snapshot:$upload_maven_url_snapshot")
+println("upload_group:$upload_group")
+println("upload_version:$upload_version")
+
+
+def doSh(def shell) {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'sh', '-c', shell
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
