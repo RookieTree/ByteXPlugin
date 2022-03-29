@@ -1,6 +1,2 @@
 //使用通用的依赖和发布方式
 apply from: rootProject.file('gradle/plugin.gradle')
-//如果module需要单独添加依赖则添加下面的
-dependencies {
-    implementation "br.usp.each.saeg:asm-defuse:0.0.5"
-}
